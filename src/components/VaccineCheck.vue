@@ -38,7 +38,7 @@ export default {
       }
       this.loading = true;
       this.result = "";
-      localStorage.set(COWIN_CLONE_PIN, this.pin);
+      localStorage.setItem(COWIN_CLONE_PIN, this.pin);
       // https://www.cowin.gov.in/home
       const result = await fetch(
         `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=${
@@ -70,7 +70,7 @@ export default {
     },
   },
   created() {
-    this.pin = localStorage.get(COWIN_CLONE_PIN) || this.pin;
+    this.pin = localStorage.getItem(COWIN_CLONE_PIN) || this.pin;
   },
 };
 </script>
