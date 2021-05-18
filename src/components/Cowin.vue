@@ -1,7 +1,9 @@
 <template>
   <div class="cowin-link">
     Click
-    <a href="https://www.cowin.gov.in/home" target="_blank">here</a>
+    <a href="https://www.cowin.gov.in/home" rel="noopener" target="_blank"
+      >here</a
+    >
     to book an appointment
   </div>
 </template>
