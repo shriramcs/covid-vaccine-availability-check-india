@@ -21,6 +21,7 @@
 </template>
 
 <script>
+const COWIN_CLONE_PIN = "COWIN_CLONE_PIN";
 export default {
   name: "VaccineCheck",
   data() {
@@ -37,6 +38,7 @@ export default {
       }
       this.loading = true;
       this.result = "";
+      localStorage.set(COWIN_CLONE_PIN, this.pin);
       // https://www.cowin.gov.in/home
       const result = await fetch(
         `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=${
@@ -66,6 +68,9 @@ export default {
       }
       return dd + "-" + mm + "-" + yyyy;
     },
+  },
+  created() {
+    this.pin = localStorage.get(COWIN_CLONE_PIN) || this.pin;
   },
 };
 </script>
