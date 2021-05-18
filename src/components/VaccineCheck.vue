@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import { getCurrentDate } from "../shared/util.js";
 const COWIN_CLONE_PIN = "COWIN_CLONE_PIN";
 export default {
   name: "VaccineCheck",
@@ -29,44 +30,42 @@ export default {
       result: "",
       loading: false,
       pin: 583231,
+      age: 18,
     };
   },
   methods: {
-    async getAvailableSlots(age) {
+    getAvailableSlots(age) {
       if (this.isPinInvalid(this.pin) || this.loading) {
         return;
       }
+      this.age = age;
       this.loading = true;
       this.result = "";
       localStorage.setItem(COWIN_CLONE_PIN, this.pin);
-      // https://www.cowin.gov.in/home
-      const result = await fetch(
+      fetch(
         `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=${
           this.pin
-        }&date=${this.getCurrentDate()}`
-      ).then(async (d) => await d.json());
+        }&date=${getCurrentDate()}`
+      )
+        .then((d) => d.json())
+        .then(this.handleSuccess)
+        .catch(this.handleError);
+    },
+    handleSuccess(result) {
       this.result = ((result || {}).centers || []).some(
-        (d) => (d.sessions || []).filter((t) => t.min_age_limit === age).length
+        (d) =>
+          (d.sessions || []).filter((t) => t.min_age_limit === this.age).length
       )
         ? " Vaccines are available"
         : "Sorry! Vaccines are not available";
       this.loading = false;
     },
+    handleError() {
+      this.loading = false;
+      this.result = "Error while checking availability";
+    },
     isPinInvalid(pin) {
       return !(pin && (pin || "").toString().length === 6);
-    },
-    getCurrentDate() {
-      let today = new Date();
-      let dd = today.getDate();
-      let mm = today.getMonth() + 1;
-      let yyyy = today.getFullYear();
-      if (dd < 10) {
-        dd = "0" + dd;
-      }
-      if (mm < 10) {
-        mm = "0" + mm;
-      }
-      return dd + "-" + mm + "-" + yyyy;
     },
   },
   created() {
