@@ -7,8 +7,12 @@
       <input v-model="pin" placeholder="583231" />
     </p>
     <p>
-      <button @click="getAvailableSlots(18)">Check 18+</button>
-      <button @click="getAvailableSlots(45)">Check 45+</button>
+      <button @click="getAvailableSlots(18)" :disabled="loading">
+        Check 18+
+      </button>
+      <button @click="getAvailableSlots(45)" :disabled="loading">
+        Check 45+
+      </button>
     </p>
     <section>
       <p>{{ loading ? "Loading" : "" }} {{ result }}</p>
@@ -28,7 +32,7 @@ export default {
   },
   methods: {
     async getAvailableSlots(age) {
-      if (this.isPinInvalid(this.pin)) {
+      if (this.isPinInvalid(this.pin) || this.loading) {
         return;
       }
       this.loading = true;

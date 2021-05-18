@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="cowin-link">
     Click
     <a href="https://www.cowin.gov.in/home" target="_blank">here</a>
     to book an appointment
@@ -11,7 +11,7 @@ export default {
 };
 </script>
 <style scoped>
-a {
-  margin-top: 5rem;
+.cowin-link {
+  margin-top: 4rem;
 }
 </style>
